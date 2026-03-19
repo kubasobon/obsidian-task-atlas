@@ -1,31 +1,52 @@
 {
-  "name": "obsidian-rollover-daily-todos",
-  "version": "1.2.0",
-  "description": "This Obsidian.md plugin rolls over incomplete TODOs from the previous daily note to today's daily note. (https://obsidian.md)",
-  "main": "main.js",
-  "scripts": {
-    "dev": "rollup -c -w",
-    "build": "rollup -c --environment BUILD:production",
-    "test": "vitest",
-    "format": "prettier --write ."
-  },
-  "cspell": {
-    "words": [
-      "todos"
-    ]
-  },
-  "keywords": [],
-  "author": "Lukas Mölschl",
-  "license": "MIT",
-  "devDependencies": {
-    "@rollup/plugin-commonjs": "^15.1.0",
-    "@rollup/plugin-node-resolve": "^9.0.0",
-    "obsidian": "https://github.com/obsidianmd/obsidian-api/tarball/master",
-    "prettier": "^2.8.1",
-    "rollup": "^2.32.1",
-    "vitest": "^3.1.2"
-  },
-  "dependencies": {
-    "obsidian-daily-notes-interface": "^0.9.2"
-  }
+    "name": "obsidian-todo-keeper",
+    "version": "0.0.1",
+    "description": "Reimplementation of obsidian-rollover-daily-todos Obsidian.md plugin (by Lukas Mölschl) according to personal taste",
+    "main": "main.js",
+    "author": "Kuba Soboń",
+    "authorUrl": "https://kubasobon.com",
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/kubasobon/obsidian-todo-keeper.git"
+    },
+    "homepage": "https://github.com/kubasobon/obsidian-todo-keeper",
+    "keywords": [
+        "obsidian",
+        "plugin",
+        "todo",
+        "keeper",
+        "rollover",
+        "daily-notes"
+    ],
+    "scripts": {
+        "dev": "vite --watch",
+        "build": "vite build",
+        "test": "jest",
+        "test:watch": "jest --watch",
+        "typecheck": "tsc --noEmit",
+        "lint": "eslint src/",
+        "format": "prettier --write ."
+    },
+    "cspell": {
+        "words": [
+            "todos"
+        ]
+    },
+    "devDependencies": {
+        "@typescript-eslint/eslint-plugin": "^7.0.0",
+        "@typescript-eslint/parser": "^7.0.0",
+        "@types/jest": "^29.5.0",
+        "@types/node": "^20.0.0",
+        "eslint": "^8.50.0",
+        "jest": "^29.5.0",
+        "prettier": "^3.0.0",
+        "ts-jest": "^29.1.0",
+        "typescript": "^5.0.0",
+        "vite": "^5.0.0",
+        "obsidian": "https://github.com/obsidianmd/obsidian-api/tarball/master"
+    },
+    "dependencies": {
+        "obsidian-daily-notes-interface": "^0.9.2"
+    }
 }
