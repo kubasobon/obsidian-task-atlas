@@ -2,7 +2,6 @@
 
 [![Build](https://github.com/kubasobon/obsidian-todo-keeper/actions/workflows/ci.yml/badge.svg)](https://github.com/kubasobon/obsidian-todo-keeper/actions/workflows/ci.yml)
 
-> Forked from [obsidian-rollover-daily-todos](https://github.com/lumoe/obsidian-rollover-daily-todos) by [lumoe](https://github.com/lumoe).
 > **Requires** the **Daily notes** core plugin (Settings → Core plugins → Daily notes).
 
 An [Obsidian](https://obsidian.md) plugin that carries incomplete todos from your previous daily note into today's. It preserves your heading structure, sub-headings, and nested tasks — not just individual lines.
