@@ -66,10 +66,7 @@ export default class TodoKeeperPlugin extends Plugin {
   isDailyNotesEnabled(): boolean {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const app = this.app as any;
-    const dailyNotesEnabled = app.internalPlugins?.plugins["daily-notes"]?.enabled;
-    const periodicNotesEnabled =
-      app.plugins?.getPlugin("periodic-notes")?.settings?.daily?.enabled;
-    return !!(dailyNotesEnabled || periodicNotesEnabled);
+    return !!(app.internalPlugins?.plugins["daily-notes"]?.enabled);
   }
 
   async keepTodos(inputFile?: TFile): Promise<void> {
@@ -88,7 +85,7 @@ export default class TodoKeeperPlugin extends Plugin {
 
     if (!this.isDailyNotesEnabled()) {
       new Notice(
-        "Todo Keeper: Daily Notes is not enabled. Enable the Daily Notes or Periodic Notes plugin to use this plugin.",
+        "Todo Keeper: Daily Notes plugin is not enabled. Enable it under Settings → Core plugins → Daily notes.",
         10000
       );
       return;
