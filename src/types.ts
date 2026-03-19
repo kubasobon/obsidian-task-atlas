@@ -3,8 +3,8 @@ export const DEFAULT_DONE_MARKERS = "xX-";
 export interface PluginSettings {
   templateHeading: string;
   deleteOnComplete: boolean;
-  removeEmptyTodos: boolean;
-  keepOnFileCreate: boolean;
+  removeEmptyTasks: boolean;
+  carryOnFileCreate: boolean;
   doneStatusMarkers: string;
   leadingNewLine: boolean;
 }
@@ -12,8 +12,8 @@ export interface PluginSettings {
 export const DEFAULT_SETTINGS: PluginSettings = {
   templateHeading: "none",
   deleteOnComplete: false,
-  removeEmptyTodos: false,
-  keepOnFileCreate: true,
+  removeEmptyTasks: false,
+  carryOnFileCreate: true,
   doneStatusMarkers: DEFAULT_DONE_MARKERS,
   leadingNewLine: true,
 };

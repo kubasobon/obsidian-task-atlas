@@ -1,4 +1,4 @@
-import { toGraphemes, isIncompleteTodo, getChildLines, INVALID_GRAPHEMES } from "./get-todos";
+import { toGraphemes, isIncompleteTask, getChildLines, INVALID_GRAPHEMES } from "./get-tasks";
 
 /** Returns the heading level (number of `#` chars), or 0 if not a heading. */
 export function getHeadingLevel(line: string): number {
@@ -6,8 +6,8 @@ export function getHeadingLevel(line: string): number {
   return match ? match[1].length : 0;
 }
 
-/** Returns true if the line is a complete (done) todo. */
-export function isCompleteTodo(line: string, doneMarkers: string[]): boolean {
+/** Returns true if the line is a complete (done) task. */
+export function isCompleteTask(line: string, doneMarkers: string[]): boolean {
   const match = line.match(/\s*[*+-] \[(.+?)\]/);
   if (!match) return false;
   const chars = toGraphemes(match[1]);
@@ -58,14 +58,14 @@ export function extractHeadingSection(
 }
 
 /**
- * Returns section lines with complete todos removed — but only when ALL of
- * their child todo lines are also complete. Rules:
+ * Returns section lines with complete tasks removed — but only when ALL of
+ * their child task lines are also complete. Rules:
  * - Incomplete parent: kept with ALL its children as-is (no re-evaluation of children)
  * - Complete parent with any incomplete child: kept with ALL its children as-is
  * - Complete parent with no incomplete children: removed along with all children
- * - Non-todo lines (headings, prose): always kept
+ * - Non-task lines (headings, prose): always kept
  */
-export function removeCompletedTodosFromSection(
+export function removeCompletedTasksFromSection(
   lines: string[],
   doneMarkers: string[]
 ): string[] {
@@ -73,20 +73,20 @@ export function removeCompletedTodosFromSection(
   let i = 0;
   while (i < lines.length) {
     const line = lines[i];
-    if (isIncompleteTodo(line, doneMarkers)) {
+    if (isIncompleteTask(line, doneMarkers)) {
       // Incomplete parent: keep it and ALL its children without re-evaluating them
       const children = getChildLines(lines, i);
       result.push(line, ...children);
       i += 1 + children.length;
-    } else if (isCompleteTodo(line, doneMarkers)) {
+    } else if (isCompleteTask(line, doneMarkers)) {
       const children = getChildLines(lines, i);
-      const hasIncompleteChild = children.some((c) => isIncompleteTodo(c, doneMarkers));
+      const hasIncompleteChild = children.some((c) => isIncompleteTask(c, doneMarkers));
       if (hasIncompleteChild) {
         // Complete parent with incomplete children: keep the whole block as-is
         result.push(line, ...children);
         i += 1 + children.length;
       } else {
-        // Fully done: drop this todo and all its children
+        // Fully done: drop this task and all its children
         i += 1 + children.length;
       }
     } else {
@@ -98,13 +98,13 @@ export function removeCompletedTodosFromSection(
 }
 
 /**
- * Returns section lines with incomplete todos removed from yesterday's note.
- * When an incomplete todo has complete children (done work worth recording),
+ * Returns section lines with incomplete tasks removed from yesterday's note.
+ * When an incomplete task has complete children (done work worth recording),
  * the parent is kept as structural context alongside those complete children.
- * Incomplete children are removed recursively. A standalone incomplete todo
+ * Incomplete children are removed recursively. A standalone incomplete task
  * with no complete children anywhere in its subtree is dropped entirely.
  */
-export function removeIncompleteTodosFromSection(
+export function removeIncompleteTasksFromSection(
   lines: string[],
   doneMarkers: string[]
 ): string[] {
@@ -112,9 +112,9 @@ export function removeIncompleteTodosFromSection(
   let i = 0;
   while (i < lines.length) {
     const line = lines[i];
-    if (isIncompleteTodo(line, doneMarkers)) {
+    if (isIncompleteTask(line, doneMarkers)) {
       const children = getChildLines(lines, i);
-      const keptChildren = removeIncompleteTodosFromSection(children, doneMarkers);
+      const keptChildren = removeIncompleteTasksFromSection(children, doneMarkers);
       if (keptChildren.length > 0) {
         // Keep the parent as structural context for its complete children
         result.push(line, ...keptChildren);

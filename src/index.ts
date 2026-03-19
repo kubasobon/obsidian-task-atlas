@@ -4,14 +4,14 @@ import {
   getAllDailyNotes,
   getDailyNote,
 } from "obsidian-daily-notes-interface";
-import TodoKeeperSettingTab from "./ui/TodoKeeperSettingTab";
-import { parseDoneMarkers, isIncompleteTodo } from "./get-todos";
+import TaskAtlasSettingTab from "./ui/TaskAtlasSettingTab";
+import { parseDoneMarkers, isIncompleteTask } from "./get-tasks";
 import { DEFAULT_DONE_MARKERS, DEFAULT_SETTINGS, PluginSettings } from "./types";
-import { isEmptyTodo, buildKeepNotice } from "./keep-utils";
+import { isEmptyTask, buildCarryNotice } from "./carry-utils";
 import {
   extractHeadingSection,
-  removeCompletedTodosFromSection,
-  removeIncompleteTodosFromSection,
+  removeCompletedTasksFromSection,
+  removeIncompleteTasksFromSection,
   replaceHeadingSection,
 } from "./section-utils";
 
@@ -52,7 +52,7 @@ function getPreviousDailyNote(folder: string, format: string): TFile | undefined
   return sorted[0]?.file;
 }
 
-export default class TodoKeeperPlugin extends Plugin {
+export default class TaskAtlasPlugin extends Plugin {
   settings!: PluginSettings;
 
   async loadSettings() {
@@ -69,7 +69,7 @@ export default class TodoKeeperPlugin extends Plugin {
     return !!(app.internalPlugins?.plugins["daily-notes"]?.enabled);
   }
 
-  async keepTodos(inputFile?: TFile): Promise<void> {
+  async carryOverTasks(inputFile?: TFile): Promise<void> {
     // Resolve today's daily note (from argument or the daily notes index)
     const allDailyNotes = getAllDailyNotes();
     const file = inputFile ?? getDailyNote(window.moment(), allDailyNotes);
@@ -85,7 +85,7 @@ export default class TodoKeeperPlugin extends Plugin {
 
     if (!this.isDailyNotesEnabled()) {
       new Notice(
-        "Todo Keeper: Daily Notes plugin is not enabled. Enable it under Settings → Core plugins → Daily notes.",
+        "TaskAtlas: Daily Notes plugin is not enabled. Enable it under Settings → Core plugins → Daily notes.",
         10000
       );
       return;
@@ -94,7 +94,7 @@ export default class TodoKeeperPlugin extends Plugin {
     const yesterday = getPreviousDailyNote(folder, format ?? "YYYY-MM-DD");
     if (!yesterday) return;
 
-    const { templateHeading, deleteOnComplete, removeEmptyTodos, doneStatusMarkers, leadingNewLine } =
+    const { templateHeading, deleteOnComplete, removeEmptyTasks, doneStatusMarkers, leadingNewLine } =
       this.settings;
     const doneMarkers = parseDoneMarkers(doneStatusMarkers ?? DEFAULT_DONE_MARKERS);
 
@@ -106,13 +106,13 @@ export default class TodoKeeperPlugin extends Plugin {
       if (!section) return content;
       sectionLines = section.sectionLines;
       if (!deleteOnComplete) return content;
-      const cleaned = removeIncompleteTodosFromSection(sectionLines, doneMarkers);
+      const cleaned = removeIncompleteTasksFromSection(sectionLines, doneMarkers);
       return replaceHeadingSection(content, templateHeading, cleaned, false).content;
     });
 
     if (!sectionLines) {
       if (templateHeading !== "none") {
-        new Notice(`Todo Keeper: '${templateHeading}' not found in yesterday's note.`, 6000);
+        new Notice(`TaskAtlas: '${templateHeading}' not found in yesterday's note.`, 6000);
       }
       return;
     }
@@ -122,11 +122,11 @@ export default class TodoKeeperPlugin extends Plugin {
     let keptCount = 0;
     let headingFound = true;
     await this.app.vault.process(file, (content) => {
-      let todaySectionLines = removeCompletedTodosFromSection(captured, doneMarkers);
-      if (removeEmptyTodos) {
-        todaySectionLines = todaySectionLines.filter((l) => !isEmptyTodo(l));
+      let todaySectionLines = removeCompletedTasksFromSection(captured, doneMarkers);
+      if (removeEmptyTasks) {
+        todaySectionLines = todaySectionLines.filter((l) => !isEmptyTask(l));
       }
-      keptCount = todaySectionLines.filter((l) => isIncompleteTodo(l, doneMarkers)).length;
+      keptCount = todaySectionLines.filter((l) => isIncompleteTask(l, doneMarkers)).length;
       const { content: newContent, headingFound: found } = replaceHeadingSection(
         content,
         templateHeading,
@@ -138,29 +138,29 @@ export default class TodoKeeperPlugin extends Plugin {
     });
 
     const headingNotFoundMessage = !headingFound
-      ? `Todo Keeper: '${templateHeading}' not found in today's note — todos appended to the end.`
+      ? `TaskAtlas: '${templateHeading}' not found in today's note — tasks appended to the end.`
       : null;
-    const notice = buildKeepNotice(keptCount, headingNotFoundMessage);
+    const notice = buildCarryNotice(keptCount, headingNotFoundMessage);
     if (notice) new Notice(notice, 4000 + notice.length * 3);
   }
 
   async onload() {
     await this.loadSettings();
 
-    this.addSettingTab(new TodoKeeperSettingTab(this.app, this));
+    this.addSettingTab(new TaskAtlasSettingTab(this.app, this));
 
     this.registerEvent(
       this.app.vault.on("create", async (file: TAbstractFile) => {
-        if (!this.settings.keepOnFileCreate) return;
+        if (!this.settings.carryOnFileCreate) return;
         if (!(file instanceof TFile)) return;
-        this.keepTodos(file);
+        this.carryOverTasks(file);
       })
     );
 
     this.addCommand({
-      id: "todo-keeper-keep",
-      name: "Keep Todos Now",
-      callback: () => this.keepTodos(),
+      id: "task-atlas-carry-over",
+      name: "Carry Tasks Forward",
+      callback: () => this.carryOverTasks(),
     });
   }
 }

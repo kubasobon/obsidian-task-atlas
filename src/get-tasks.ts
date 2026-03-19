@@ -31,8 +31,8 @@ export function getIndentation(line: string): number {
   return line.search(/\S/);
 }
 
-// Returns true if the line is an incomplete (open) todo that should be kept.
-export function isIncompleteTodo(line: string, doneMarkers: string[]): boolean {
+// Returns true if the line is an incomplete (open) task that should be kept.
+export function isIncompleteTask(line: string, doneMarkers: string[]): boolean {
   const match = line.match(/\s*[*+-] \[(.+?)\]/);
   if (!match) return false;
 
@@ -59,22 +59,22 @@ export function getChildLines(lines: string[], parentIndex: number): string[] {
   return children;
 }
 
-interface GetTodosOptions {
+interface GetTasksOptions {
   lines: string[];
   withChildren?: boolean;
   doneStatusMarkers?: string | null;
 }
 
-export function getTodos({
+export function getTasks({
   lines,
   withChildren = false,
   doneStatusMarkers = null,
-}: GetTodosOptions): string[] {
+}: GetTasksOptions): string[] {
   const doneMarkers = parseDoneMarkers(doneStatusMarkers ?? DEFAULT_DONE_MARKERS);
   const result: string[] = [];
 
   for (let i = 0; i < lines.length; i++) {
-    if (!isIncompleteTodo(lines[i], doneMarkers)) continue;
+    if (!isIncompleteTask(lines[i], doneMarkers)) continue;
     result.push(lines[i]);
     if (withChildren) {
       const children = getChildLines(lines, i);

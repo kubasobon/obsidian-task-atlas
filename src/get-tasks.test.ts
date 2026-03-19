@@ -1,16 +1,16 @@
-import { getTodos } from "./get-todos";
+import { getTasks } from "./get-tasks";
 
-describe("getTodos", () => {
-  test("single todo element should return itself", () => {
+describe("getTasks", () => {
+  test("single task element should return itself", () => {
   // GIVEN
   const lines = ["- [ ] tada"];
 
   // WHEN
-  const result = getTodos({ lines });
+  const result = getTasks({ lines });
 
   // THEN
-  const todos = ["- [ ] tada"];
-  expect(result).toStrictEqual(todos);
+  const tasks = ["- [ ] tada"];
+  expect(result).toStrictEqual(tasks);
 });
 
 test("single incomplete element should return itself", () => {
@@ -18,38 +18,38 @@ test("single incomplete element should return itself", () => {
   const lines = ["- [/] tada"];
 
   // WHEN
-  const result = getTodos({ lines });
+  const result = getTasks({ lines });
 
   // THEN
-  const todos = ["- [/] tada"];
-  expect(result).toStrictEqual(todos);
+  const tasks = ["- [/] tada"];
+  expect(result).toStrictEqual(tasks);
 });
 
-test("single done todo element should not return itself", () => {
+test("single done task element should not return itself", () => {
   // GIVEN
   const lines = ["- [x] tada"];
 
   // WHEN
-  const result = getTodos({ lines });
+  const result = getTasks({ lines });
 
   // THEN
-  const todos: string[] = [];
-  expect(result).toStrictEqual(todos);
+  const tasks: string[] = [];
+  expect(result).toStrictEqual(tasks);
 });
 
-test("single canceled todo element should not return itself", () => {
+test("single canceled task element should not return itself", () => {
   // GIVEN
   const lines = ["- [-] tada"];
 
   // WHEN
-  const result = getTodos({ lines });
+  const result = getTasks({ lines });
 
   // THEN
-  const todos: string[] = [];
-  expect(result).toStrictEqual(todos);
+  const tasks: string[] = [];
+  expect(result).toStrictEqual(tasks);
 });
 
-test("get todos with children", function () {
+test("get tasks with children", function () {
   // GIVEN
   const lines = [
     "- [ ] TODO",
@@ -62,7 +62,7 @@ test("get todos with children", function () {
   ];
 
   // WHEN
-  const todos = getTodos({ lines: lines, withChildren: true });
+  const tasks = getTasks({ lines: lines, withChildren: true });
 
   // THEN
   const result = [
@@ -73,10 +73,10 @@ test("get todos with children", function () {
     "    - [ ] More children",
     "    - another child",
   ];
-  expect(todos).toStrictEqual(result);
+  expect(tasks).toStrictEqual(result);
 });
 
-test("get todos (with alternate symbols) with children", function () {
+test("get tasks (with alternate symbols) with children", function () {
   // GIVEN
   const lines = [
     "+ [ ] TODO",
@@ -89,7 +89,7 @@ test("get todos (with alternate symbols) with children", function () {
   ];
 
   // WHEN
-  const todos = getTodos({ lines: lines, withChildren: true });
+  const tasks = getTasks({ lines: lines, withChildren: true });
 
   // THEN
   const result = [
@@ -100,10 +100,10 @@ test("get todos (with alternate symbols) with children", function () {
     "    - [ ] More children",
     "    + another child",
   ];
-  expect(todos).toStrictEqual(result);
+  expect(tasks).toStrictEqual(result);
 });
 
-test("get todos (with alternate symbols and partially checked todos) with children", function () {
+test("get tasks (with alternate symbols and partially checked tasks) with children", function () {
   // GIVEN
   const lines = [
     "+ [x] Completed TODO",
@@ -116,7 +116,7 @@ test("get todos (with alternate symbols and partially checked todos) with childr
   ];
 
   // WHEN
-  const todos = getTodos({ lines: lines, withChildren: true });
+  const tasks = getTasks({ lines: lines, withChildren: true });
 
   // THEN
   const result = [
@@ -125,10 +125,10 @@ test("get todos (with alternate symbols and partially checked todos) with childr
     "    - [x] Completed child",
     "    + another child",
   ];
-  expect(todos).toStrictEqual(result);
+  expect(tasks).toStrictEqual(result);
 });
 
-test("get todos (with custom ✅ done status and 🟣 not-done child status) with children", function () {
+test("get tasks (with custom ✅ done status and 🟣 not-done child status) with children", function () {
   // GIVEN
   const lines = [
     "+ [✅] Completed TODO",
@@ -141,7 +141,7 @@ test("get todos (with custom ✅ done status and 🟣 not-done child status) wit
   ];
 
   // WHEN
-  const todos = getTodos({
+  const tasks = getTasks({
     lines: lines,
     withChildren: true,
     doneStatusMarkers: "✅",
@@ -154,10 +154,10 @@ test("get todos (with custom ✅ done status and 🟣 not-done child status) wit
     "    - [✅] Completed child",
     "    + another child",
   ];
-  expect(todos).toStrictEqual(result);
+  expect(tasks).toStrictEqual(result);
 });
 
-test("get todos (with default dash prefix and finished todos) with children", function () {
+test("get tasks (with default dash prefix and finished tasks) with children", function () {
   // GIVEN
   const lines = [
     "- [x] Completed TODO",
@@ -170,7 +170,7 @@ test("get todos (with default dash prefix and finished todos) with children", fu
   ];
 
   // WHEN
-  const todos = getTodos({ lines: lines, withChildren: true });
+  const tasks = getTasks({ lines: lines, withChildren: true });
 
   // THEN
   const result = [
@@ -179,10 +179,10 @@ test("get todos (with default dash prefix and finished todos) with children", fu
     "    - [x] Completed child",
     "    + another child",
   ];
-  expect(todos).toStrictEqual(result);
+  expect(tasks).toStrictEqual(result);
 });
 
-test("get todos without children", () => {
+test("get tasks without children", () => {
   // GIVEN
   const lines = [
     "- [ ] TODO",
@@ -195,7 +195,7 @@ test("get todos without children", () => {
   ];
 
   // WHEN
-  const todos = getTodos({ lines });
+  const tasks = getTasks({ lines });
 
   // THEN
   const result = [
@@ -204,10 +204,10 @@ test("get todos without children", () => {
     "- [ ] Another one",
     "    - [ ] More children",
   ];
-  expect(todos).toStrictEqual(result);
+  expect(tasks).toStrictEqual(result);
 });
 
-test("get todos without children (with 🟣 not-done child status)", () => {
+test("get tasks without children (with 🟣 not-done child status)", () => {
   // GIVEN
   const lines = [
     "- [ ] TODO",
@@ -220,7 +220,7 @@ test("get todos without children (with 🟣 not-done child status)", () => {
   ];
 
   // WHEN
-  const todos = getTodos({ lines });
+  const tasks = getTasks({ lines });
 
   // THEN
   const result = [
@@ -229,10 +229,10 @@ test("get todos without children (with 🟣 not-done child status)", () => {
     "- [🟣] Another one",
     "    - [ ] More children",
   ];
-  expect(todos).toStrictEqual(result);
+  expect(tasks).toStrictEqual(result);
 });
 
-test("get todos with correct alternate checkbox children", function () {
+test("get tasks with correct alternate checkbox children", function () {
   // GIVEN
   const lines = [
     "- [ ] TODO",
@@ -247,7 +247,7 @@ test("get todos with correct alternate checkbox children", function () {
   ];
 
   // WHEN
-  const todos = getTodos({ lines: lines, withChildren: true });
+  const tasks = getTasks({ lines: lines, withChildren: true });
 
   // THEN
   const result = [
@@ -260,10 +260,10 @@ test("get todos with correct alternate checkbox children", function () {
     "    - [/] More children",
     "    - another child",
   ];
-  expect(todos).toStrictEqual(result);
+  expect(tasks).toStrictEqual(result);
 });
 
-test("get todos with children doesn't fail if child at end of list", () => {
+test("get tasks with children doesn't fail if child at end of list", () => {
   // GIVEN
   const lines = [
     "- [ ] TODO",
@@ -275,7 +275,7 @@ test("get todos with children doesn't fail if child at end of list", () => {
   ];
 
   // WHEN
-  const todos = getTodos({ lines, withChildren: true });
+  const tasks = getTasks({ lines, withChildren: true });
 
   // THEN
   const result = [
@@ -286,10 +286,10 @@ test("get todos with children doesn't fail if child at end of list", () => {
     "    - [ ] More children",
     "    - another child",
   ];
-  expect(todos).toStrictEqual(result);
+  expect(tasks).toStrictEqual(result);
 });
 
-test("get todos with nested children also adds nested children", () => {
+test("get tasks with nested children also adds nested children", () => {
   // GIVEN
   const lines = [
     "- [ ] TODO",
@@ -303,7 +303,7 @@ test("get todos with nested children also adds nested children", () => {
   ];
 
   // WHEN
-  const todos = getTodos({ lines, withChildren: true });
+  const tasks = getTasks({ lines, withChildren: true });
 
   // THEN
   const result = [
@@ -316,10 +316,10 @@ test("get todos with nested children also adds nested children", () => {
     "    - [ ] More children",
     "    - another child",
   ];
-  expect(todos).toStrictEqual(result);
+  expect(tasks).toStrictEqual(result);
 });
 
-test("get todos doesn't add intermediate other elements", () => {
+test("get tasks doesn't add intermediate other elements", () => {
   // GIVEN
   const lines = [
     "# Some title",
@@ -342,7 +342,7 @@ test("get todos doesn't add intermediate other elements", () => {
   ];
 
   // WHEN
-  const todos = getTodos({ lines, withChildren: true });
+  const tasks = getTasks({ lines, withChildren: true });
 
   // THEN
   const result = [
@@ -353,10 +353,10 @@ test("get todos doesn't add intermediate other elements", () => {
     "    - [ ] More children",
     "    - another child",
   ];
-  expect(todos).toStrictEqual(result);
+  expect(tasks).toStrictEqual(result);
 });
 
-test("get todos supports custom done status markers", () => {
+test("get tasks supports custom done status markers", () => {
   // GIVEN
   const lines = [
     "- [ ] Incomplete task",
@@ -368,7 +368,7 @@ test("get todos supports custom done status markers", () => {
   ];
 
   // WHEN - only consider 'C' and '?' as done
-  const todos = getTodos({ lines, doneStatusMarkers: "C?" });
+  const tasks = getTasks({ lines, doneStatusMarkers: "C?" });
 
   // THEN - x, X, and - should be considered incomplete now
   const result = [
@@ -377,10 +377,10 @@ test("get todos supports custom done status markers", () => {
     "- [X] Completed task (X)",
     "- [-] Completed task (-)",
   ];
-  expect(todos).toStrictEqual(result);
+  expect(tasks).toStrictEqual(result);
 });
 
-test("get todos supports custom status marker edge cases (exclusion)", () => {
+test("get tasks supports custom status marker edge cases (exclusion)", () => {
   // GIVEN
   const lines = [
     "- [ ] Normal task",
@@ -421,7 +421,7 @@ test("get todos supports custom status marker edge cases (exclusion)", () => {
   ];
 
   // WHEN - using all types of characters as done markers
-  const todos = getTodos({
+  const tasks = getTasks({
     lines,
     doneStatusMarkers:
       "✅❌✔️✓✗👍\u0000\u0007\u0008\u001B\u202Ea\u0300e\u0301.*+?()[]{}\\^$|/àé",
@@ -429,10 +429,10 @@ test("get todos supports custom status marker edge cases (exclusion)", () => {
 
   // THEN - only the normal task should be returned
   const result = ["- [ ] Normal task"];
-  expect(todos).toStrictEqual(result);
+  expect(tasks).toStrictEqual(result);
 });
 
-test("get todos supports custom status marker edge cases (inclusion)", () => {
+test("get tasks supports custom status marker edge cases (inclusion)", () => {
   // GIVEN
   const lines = [
     "- [ ] Normal task",
@@ -473,7 +473,7 @@ test("get todos supports custom status marker edge cases (inclusion)", () => {
   ];
 
   // WHEN - only consider 'C' as done
-  const todos = getTodos({ lines, doneStatusMarkers: "C" });
+  const tasks = getTasks({ lines, doneStatusMarkers: "C" });
 
   // THEN - only the normal task should be returned
   const result = [
@@ -513,10 +513,10 @@ test("get todos supports custom status marker edge cases (inclusion)", () => {
     "- [à] Simple accented character",
     "- [é] Simple accented character 2",
   ];
-  expect(todos).toStrictEqual(result);
+  expect(tasks).toStrictEqual(result);
 });
 
-test("should not match malformed todos", () => {
+test("should not match malformed tasks", () => {
   const lines = [
     "- [ ] valid todo",
     "- [x] done", // done, should NOT match
@@ -532,8 +532,8 @@ test("should not match malformed todos", () => {
     "- [\u200C] Zero-width non-joiner",
     "- [\u200D] Zero-width joiner",
   ];
-  const todos = getTodos({ lines });
-  expect(todos).toStrictEqual(["- [ ] valid todo"]);
+  const tasks = getTasks({ lines });
+  expect(tasks).toStrictEqual(["- [ ] valid todo"]);
   });
 });
 

@@ -1,20 +1,20 @@
 {
-    "name": "obsidian-todo-keeper",
+    "name": "obsidian-task-atlas",
     "version": "0.0.1",
-    "description": "Keeps incomplete todos from your previous daily note into today's",
+    "description": "Carries incomplete tasks forward from your previous daily note into today's",
     "main": "main.js",
     "author": "Kuba Soboń",
     "authorUrl": "https://kubasobon.com",
     "license": "MIT",
     "repository": {
         "type": "git",
-        "url": "https://github.com/kubasobon/obsidian-todo-keeper.git"
+        "url": "https://github.com/kubasobon/obsidian-task-atlas.git"
     },
-    "homepage": "https://github.com/kubasobon/obsidian-todo-keeper",
+    "homepage": "https://github.com/kubasobon/obsidian-task-atlas",
     "keywords": [
         "obsidian",
         "plugin",
-        "todo",
+        "task",
         "keeper",
         "daily-notes"
     ],
@@ -29,7 +29,7 @@
     },
     "cspell": {
         "words": [
-            "todos"
+            "tasks"
         ]
     },
     "devDependencies": {

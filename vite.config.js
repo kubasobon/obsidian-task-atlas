@@ -10,7 +10,7 @@ export default defineConfig({
     sourcemap: true,
     lib: {
       entry: resolve(__dirname, 'src/index.ts'),
-      name: 'ObsidianTodoKeeper',
+      name: 'TaskAtlas',
       fileName: () => 'main.js',
       formats: ['cjs'],
     },

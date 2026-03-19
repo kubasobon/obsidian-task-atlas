@@ -1,12 +1,12 @@
 import { App, PluginSettingTab, Setting, TFile } from "obsidian";
 import { getDailyNoteSettings } from "obsidian-daily-notes-interface";
-import type TodoKeeperPlugin from "../index";
+import type TaskAtlasPlugin from "../index";
 import { DEFAULT_DONE_MARKERS } from "../types";
 
-export default class TodoKeeperSettingTab extends PluginSettingTab {
-  plugin: TodoKeeperPlugin;
+export default class TaskAtlasSettingTab extends PluginSettingTab {
+  plugin: TaskAtlasPlugin;
 
-  constructor(app: App, plugin: TodoKeeperPlugin) {
+  constructor(app: App, plugin: TaskAtlasPlugin) {
     super(app, plugin);
     this.plugin = plugin;
   }
@@ -38,7 +38,7 @@ export default class TodoKeeperSettingTab extends PluginSettingTab {
     this.containerEl.empty();
     new Setting(this.containerEl)
       .setName("Template heading")
-      .setDesc("Heading in your daily note template where unfinished todos will be placed.")
+      .setDesc("Heading in your daily note template where unfinished tasks will be placed.")
       .addDropdown((dropdown) =>
         dropdown
           .addOptions({
@@ -58,7 +58,7 @@ export default class TodoKeeperSettingTab extends PluginSettingTab {
     new Setting(this.containerEl)
       .setName("Clean up yesterday's note")
       .setDesc(
-        `After copying to today, removes incomplete todos from yesterday's note. Completed todos remain as a record of what was done. ⚠️ Destructive — enable with caution.`
+        `After copying to today, removes incomplete tasks from yesterday's note. Completed tasks remain as a record of what was done. ⚠️ Destructive — enable with caution.`
       )
       .addToggle((toggle) =>
         toggle
@@ -74,21 +74,21 @@ export default class TodoKeeperSettingTab extends PluginSettingTab {
       .setDesc("Empty checkboxes (- [ ]) will not be carried over to today's note.")
       .addToggle((toggle) =>
         toggle
-          .setValue(this.plugin.settings.removeEmptyTodos || false)
+          .setValue(this.plugin.settings.removeEmptyTasks || false)
           .onChange((value) => {
-            this.plugin.settings.removeEmptyTodos = value;
+            this.plugin.settings.removeEmptyTasks = value;
             this.plugin.saveSettings();
           })
       );
 
     new Setting(this.containerEl)
       .setName("Run automatically on daily note creation")
-      .setDesc("Automatically keeps todos when a new daily note is created.")
+      .setDesc("Automatically carries tasks forward when a new daily note is created.")
       .addToggle((toggle) =>
         toggle
-          .setValue(this.plugin.settings.keepOnFileCreate ?? true)
+          .setValue(this.plugin.settings.carryOnFileCreate ?? true)
           .onChange((value) => {
-            this.plugin.settings.keepOnFileCreate = value;
+            this.plugin.settings.carryOnFileCreate = value;
             this.plugin.saveSettings();
           })
       );
@@ -109,7 +109,7 @@ export default class TodoKeeperSettingTab extends PluginSettingTab {
 
     new Setting(this.containerEl)
       .setName("Blank line after heading")
-      .setDesc("Insert a blank line between the template heading and the first todo.")
+      .setDesc("Insert a blank line between the template heading and the first task.")
       .addToggle((toggle) =>
         toggle
           .setValue(this.plugin.settings.leadingNewLine ?? true)
