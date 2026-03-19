@@ -5,7 +5,7 @@
 //   U+200D  ZERO WIDTH JOINER       — invisible, joins emoji sequences (e.g. 👨‍👩‍👧‍👦)
 // All four are zero-width or control characters that Intl.Segmenter counts as a single
 // grapheme cluster, so without this list they would pass the length === 1 check.
-const INVALID_GRAPHEMES = ["\u202E", "\u200B", "\u200C", "\u200D"];
+export const INVALID_GRAPHEMES = ["\u202E", "\u200B", "\u200C", "\u200D"];
 
 // Splits text into Unicode grapheme clusters.
 // Falls back to Array.from() which handles surrogate pairs but not complex clusters.

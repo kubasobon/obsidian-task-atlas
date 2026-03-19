@@ -7,46 +7,6 @@ export function isEmptyTodo(line: string): boolean {
 }
 
 /**
- * Inserts todos into note content, either after a template heading or appended
- * at the end. Returns the modified content and whether the heading was found.
- */
-export function insertTodosIntoNote(
-  content: string,
-  todos: string[],
-  heading: string,
-  leadingNewLine: boolean
-): { content: string; headingFound: boolean } {
-  const todoBlock = `\n${todos.join("\n")}`;
-
-  if (heading === "none") {
-    return { content: content + todoBlock, headingFound: true };
-  }
-
-  const updated = content.replace(
-    heading,
-    `${heading}${leadingNewLine ? "\n" : ""}${todoBlock}`
-  );
-
-  if (updated === content) {
-    // Heading not found — fall back to appending at the end
-    return { content: content + todoBlock, headingFound: false };
-  }
-
-  return { content: updated, headingFound: true };
-}
-
-/**
- * Returns note content with the specified todo lines removed.
- */
-export function removeTodosFromNote(content: string, todos: string[]): string {
-  const todoSet = new Set(todos);
-  return content
-    .split("\n")
-    .filter((line) => !todoSet.has(line))
-    .join("\n");
-}
-
-/**
  * Builds a human-readable keep summary for a Notice.
  * Returns null if there is nothing to report.
  */
