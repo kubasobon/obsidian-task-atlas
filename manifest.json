@@ -3,7 +3,7 @@
     "name": "TODO Keeper",
     "version": "0.0.1",
     "minAppVersion": "1.12.4",
-    "description": "Keeps incomplete todos from your previous daily note into today's",
+    "description": "Keeps incomplete todos from your previous daily note",
     "author": "Kuba Soboń",
     "authorUrl": "https://kubasobon.com",
     "isDesktopOnly": false
