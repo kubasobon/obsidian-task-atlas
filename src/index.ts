@@ -6,7 +6,7 @@ import {
 } from "obsidian-daily-notes-interface";
 import TodoKeeperSettingTab from "./ui/TodoKeeperSettingTab";
 import { parseDoneMarkers, isIncompleteTodo } from "./get-todos";
-import { DEFAULT_SETTINGS, PluginSettings } from "./types";
+import { DEFAULT_DONE_MARKERS, DEFAULT_SETTINGS, PluginSettings } from "./types";
 import { isEmptyTodo, buildKeepNotice } from "./keep-utils";
 import {
   extractHeadingSection,
@@ -99,7 +99,7 @@ export default class TodoKeeperPlugin extends Plugin {
 
     const { templateHeading, deleteOnComplete, removeEmptyTodos, doneStatusMarkers, leadingNewLine } =
       this.settings;
-    const doneMarkers = parseDoneMarkers(doneStatusMarkers ?? "xX-");
+    const doneMarkers = parseDoneMarkers(doneStatusMarkers ?? DEFAULT_DONE_MARKERS);
 
     // Atomically read (and optionally clean) yesterday's note.
     // The section lines are captured from the callback for use below.

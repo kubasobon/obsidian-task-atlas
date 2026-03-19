@@ -1,3 +1,5 @@
+export const DEFAULT_DONE_MARKERS = "xX-";
+
 export interface PluginSettings {
   templateHeading: string;
   deleteOnComplete: boolean;
@@ -12,6 +14,6 @@ export const DEFAULT_SETTINGS: PluginSettings = {
   deleteOnComplete: false,
   removeEmptyTodos: false,
   keepOnFileCreate: true,
-  doneStatusMarkers: "xX-",
+  doneStatusMarkers: DEFAULT_DONE_MARKERS,
   leadingNewLine: true,
 };

@@ -3,6 +3,7 @@
 //   U+200B  ZERO WIDTH SPACE        — invisible, zero-width
 //   U+200C  ZERO WIDTH NON-JOINER   — invisible, prevents ligatures
 //   U+200D  ZERO WIDTH JOINER       — invisible, joins emoji sequences (e.g. 👨‍👩‍👧‍👦)
+import { DEFAULT_DONE_MARKERS } from "./types";
 // All four are zero-width or control characters that Intl.Segmenter counts as a single
 // grapheme cluster, so without this list they would pass the length === 1 check.
 export const INVALID_GRAPHEMES = ["\u202E", "\u200B", "\u200C", "\u200D"];
@@ -20,7 +21,7 @@ export function toGraphemes(text: string): string[] {
   return Array.from(text);
 }
 
-// Parses a done-markers string (e.g. "xX-") into an array of grapheme clusters.
+// Parses a done-markers string into an array of grapheme clusters.
 export function parseDoneMarkers(raw: string): string[] {
   return toGraphemes(raw);
 }
@@ -69,7 +70,7 @@ export function getTodos({
   withChildren = false,
   doneStatusMarkers = null,
 }: GetTodosOptions): string[] {
-  const doneMarkers = parseDoneMarkers(doneStatusMarkers ?? "xX-");
+  const doneMarkers = parseDoneMarkers(doneStatusMarkers ?? DEFAULT_DONE_MARKERS);
   const result: string[] = [];
 
   for (let i = 0; i < lines.length; i++) {

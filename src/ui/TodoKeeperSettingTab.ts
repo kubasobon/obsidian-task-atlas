@@ -1,6 +1,7 @@
 import { App, PluginSettingTab, Setting, TFile } from "obsidian";
 import { getDailyNoteSettings } from "obsidian-daily-notes-interface";
 import type TodoKeeperPlugin from "../index";
+import { DEFAULT_DONE_MARKERS } from "../types";
 
 export default class TodoKeeperSettingTab extends PluginSettingTab {
   plugin: TodoKeeperPlugin;
@@ -95,11 +96,11 @@ export default class TodoKeeperSettingTab extends PluginSettingTab {
     new Setting(this.containerEl)
       .setName("Completed task markers")
       .setDesc(
-        `Characters that mark a checkbox as done. Defaults to "xX-". Any character listed here is treated as complete.`
+        `Characters that mark a checkbox as done. Defaults to "${DEFAULT_DONE_MARKERS}". Any character listed here is treated as complete.`
       )
       .addText((text) =>
         text
-          .setValue(this.plugin.settings.doneStatusMarkers || "xX-")
+          .setValue(this.plugin.settings.doneStatusMarkers || DEFAULT_DONE_MARKERS)
           .onChange((value) => {
             this.plugin.settings.doneStatusMarkers = value;
             this.plugin.saveSettings();
