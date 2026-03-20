@@ -70,7 +70,9 @@ export function getTasks({
   withChildren = false,
   doneStatusMarkers = null,
 }: GetTasksOptions): string[] {
-  const doneMarkers = parseDoneMarkers(doneStatusMarkers ?? DEFAULT_DONE_MARKERS);
+  const doneMarkers = parseDoneMarkers(
+    doneStatusMarkers ?? DEFAULT_DONE_MARKERS,
+  );
   const result: string[] = [];
 
   for (let i = 0; i < lines.length; i++) {
@@ -85,4 +87,3 @@ export function getTasks({
 
   return result;
 }
-

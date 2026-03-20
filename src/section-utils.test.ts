@@ -100,7 +100,9 @@ describe("extractHeadingSection", () => {
 describe("removeCompletedTasksFromSection", () => {
   it("keeps incomplete tasks", () => {
     const lines = ["- [ ] keep me"];
-    expect(removeCompletedTasksFromSection(lines, DONE)).toEqual(["- [ ] keep me"]);
+    expect(removeCompletedTasksFromSection(lines, DONE)).toEqual([
+      "- [ ] keep me",
+    ]);
   });
 
   it("removes complete tasks with no children", () => {
@@ -115,7 +117,11 @@ describe("removeCompletedTasksFromSection", () => {
 
   it("keeps complete tasks that have at least one incomplete child, with ALL their children", () => {
     // Complete parent has a done child AND an incomplete child → keep everything
-    const lines = ["- [x] parent", "  - [x] done child", "  - [ ] not done child"];
+    const lines = [
+      "- [x] parent",
+      "  - [x] done child",
+      "  - [ ] not done child",
+    ];
     expect(removeCompletedTasksFromSection(lines, DONE)).toEqual([
       "- [x] parent",
       "  - [x] done child",
@@ -125,7 +131,10 @@ describe("removeCompletedTasksFromSection", () => {
 
   it("always keeps headings and non-task lines", () => {
     const lines = ["### Work", "some note", "- [x] done"];
-    expect(removeCompletedTasksFromSection(lines, DONE)).toEqual(["### Work", "some note"]);
+    expect(removeCompletedTasksFromSection(lines, DONE)).toEqual([
+      "### Work",
+      "some note",
+    ]);
   });
 
   it("keeps ALL children of an incomplete parent, including done ones", () => {
@@ -139,12 +148,7 @@ describe("removeCompletedTasksFromSection", () => {
   it("3-level nesting: incomplete root keeps the entire subtree as-is", () => {
     // A(incomplete) → B(incomplete) → C(incomplete), D(done)
     // Root is incomplete → everything moves to today unchanged
-    const lines = [
-      "- [ ] A",
-      "  - [ ] B",
-      "    - [ ] C",
-      "    - [x] D",
-    ];
+    const lines = ["- [ ] A", "  - [ ] B", "    - [ ] C", "    - [x] D"];
     expect(removeCompletedTasksFromSection(lines, DONE)).toEqual([
       "- [ ] A",
       "  - [ ] B",
@@ -177,16 +181,25 @@ describe("removeIncompleteTasksFromSection", () => {
 
   it("keeps complete tasks", () => {
     const lines = ["- [x] done"];
-    expect(removeIncompleteTasksFromSection(lines, DONE)).toEqual(["- [x] done"]);
+    expect(removeIncompleteTasksFromSection(lines, DONE)).toEqual([
+      "- [x] done",
+    ]);
   });
 
   it("keeps headings and non-task lines", () => {
     const lines = ["### Work", "- [ ] todo", "prose line"];
-    expect(removeIncompleteTasksFromSection(lines, DONE)).toEqual(["### Work", "prose line"]);
+    expect(removeIncompleteTasksFromSection(lines, DONE)).toEqual([
+      "### Work",
+      "prose line",
+    ]);
   });
 
   it("removes only incomplete tasks, leaving complete ones", () => {
-    const lines = ["- [x] done task", "- [ ] pending task", "- [x] another done"];
+    const lines = [
+      "- [x] done task",
+      "- [ ] pending task",
+      "- [x] another done",
+    ];
     expect(removeIncompleteTasksFromSection(lines, DONE)).toEqual([
       "- [x] done task",
       "- [x] another done",
@@ -205,12 +218,7 @@ describe("removeIncompleteTasksFromSection", () => {
     // A(incomplete) → B(incomplete) → C(incomplete), D(done)
     // C has no done descendants → dropped entirely
     // D is done → kept; B is kept as context for D; A is kept as context for B
-    const lines = [
-      "- [ ] A",
-      "  - [ ] B",
-      "    - [ ] C",
-      "    - [x] D",
-    ];
+    const lines = ["- [ ] A", "  - [ ] B", "    - [ ] C", "    - [x] D"];
     expect(removeIncompleteTasksFromSection(lines, DONE)).toEqual([
       "- [ ] A",
       "  - [ ] B",
@@ -228,7 +236,7 @@ describe("replaceHeadingSection", () => {
       content,
       "## Tasks",
       ["- [ ] new"],
-      false
+      false,
     );
     expect(headingFound).toBe(true);
     expect(result).toBe("## Tasks\n- [ ] new\n## Journal\ntext");
@@ -236,7 +244,12 @@ describe("replaceHeadingSection", () => {
 
   it("adds a leading blank line when leadingNewLine is true", () => {
     const content = "## Tasks\n## Journal";
-    const { content: result } = replaceHeadingSection(content, "## Tasks", ["- [ ] todo"], true);
+    const { content: result } = replaceHeadingSection(
+      content,
+      "## Tasks",
+      ["- [ ] todo"],
+      true,
+    );
     expect(result).toBe("## Tasks\n\n- [ ] todo\n## Journal");
   });
 
@@ -246,7 +259,7 @@ describe("replaceHeadingSection", () => {
       content,
       "## Missing",
       ["- [ ] todo"],
-      false
+      false,
     );
     expect(headingFound).toBe(false);
     expect(result).toBe("# Note\nsome text\n- [ ] todo");
@@ -258,7 +271,7 @@ describe("replaceHeadingSection", () => {
       content,
       "none",
       ["- [ ] todo"],
-      false
+      false,
     );
     expect(headingFound).toBe(false);
     expect(result).toBe("# Note\n- [ ] todo");
@@ -270,14 +283,19 @@ describe("replaceHeadingSection", () => {
       content,
       "## Tasks",
       ["- [ ] new task"],
-      false
+      false,
     );
     expect(result).toBe("## Tasks\n- [ ] new task\n## Journal");
   });
 
   it("handles empty new section (clears heading content)", () => {
     const content = "## Tasks\n- [ ] old\n## Journal";
-    const { content: result } = replaceHeadingSection(content, "## Tasks", [], false);
+    const { content: result } = replaceHeadingSection(
+      content,
+      "## Tasks",
+      [],
+      false,
+    );
     expect(result).toBe("## Tasks\n## Journal");
   });
 });
