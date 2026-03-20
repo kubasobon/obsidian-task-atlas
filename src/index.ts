@@ -16,6 +16,7 @@ import {
 } from "./section-utils";
 
 const MAX_TIME_SINCE_CREATION = 5000; // 5 seconds
+const SYNC_DEBOUNCE_MS = 3000; // wait for sync to settle
 
 /** Strips leading/trailing slashes from a folder path. */
 function cleanFolder(folder: string | undefined): string {
@@ -54,6 +55,9 @@ function getPreviousDailyNote(folder: string, format: string): TFile | undefined
 
 export default class TaskAtlasPlugin extends Plugin {
   settings!: PluginSettings;
+  // Pending debounce timer for auto-carry on file creation.
+  private carryDebounceTimer: ReturnType<typeof setTimeout> | null = null;
+  private pendingCarryFile: TFile | null = null;
 
   async loadSettings() {
     this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
@@ -153,7 +157,15 @@ export default class TaskAtlasPlugin extends Plugin {
       this.app.vault.on("create", async (file: TAbstractFile) => {
         if (!this.settings.carryOnFileCreate) return;
         if (!(file instanceof TFile)) return;
-        this.carryOverTasks(file);
+        this.scheduleCarryOver(file);
+      })
+    );
+
+    this.registerEvent(
+      this.app.vault.on("modify", (file: TAbstractFile) => {
+        if (!(file instanceof TFile)) return;
+        if (this.pendingCarryFile?.path !== file.path) return;
+        this.scheduleCarryOver(file);
       })
     );
 
@@ -162,5 +174,27 @@ export default class TaskAtlasPlugin extends Plugin {
       name: "Carry Tasks Forward",
       callback: () => this.carryOverTasks(),
     });
+  }
+
+  /**
+   * Shows a notice immediately, then waits SYNC_DEBOUNCE_MS without any
+   * further modify events on the same file before calling carryOverTasks.
+   * This lets Obsidian Sync finish pushing remote content before we act.
+   */
+  private scheduleCarryOver(file: TFile) {
+    const isFirstSchedule = this.pendingCarryFile?.path !== file.path;
+    this.pendingCarryFile = file;
+
+    if (this.carryDebounceTimer) clearTimeout(this.carryDebounceTimer);
+
+    if (isFirstSchedule) {
+      new Notice("TaskAtlas: Carrying tasks forward…", SYNC_DEBOUNCE_MS);
+    }
+
+    this.carryDebounceTimer = setTimeout(() => {
+      this.carryDebounceTimer = null;
+      this.pendingCarryFile = null;
+      this.carryOverTasks(file);
+    }, SYNC_DEBOUNCE_MS);
   }
 }
