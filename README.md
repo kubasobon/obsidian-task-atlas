@@ -76,7 +76,6 @@ To run it manually, open the Command Palette (`Cmd/Ctrl+P`) and run **Carry Task
 | **Template heading** | Tasks are placed under this heading in today's note. If set to *None*, they are appended to the end. |
 | **Run automatically on daily note creation** | Carries tasks forward whenever a new daily note is created. Turn this off to trigger manually. |
 | **Clean up yesterday's note** | Removes incomplete tasks from yesterday's note after copying them to today. Completed tasks remain. Deleted tasks cannot be recovered. |
-| **Skip empty checkboxes** | Empty checkboxes (`- [ ]`) are not carried over. |
 | **Completed task markers** | Characters that count as "done". Defaults to `xX-`. Add characters like `>?+` to support custom statuses (e.g. from the [Tasks plugin](https://publish.obsidian.md/tasks)). |
 | **Blank line after heading** | Adds a blank line between the template heading and the first task. |
 

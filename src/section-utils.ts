@@ -1,4 +1,9 @@
-import { toGraphemes, isIncompleteTask, getChildLines, INVALID_GRAPHEMES } from "./get-tasks";
+import {
+  toGraphemes,
+  isIncompleteTask,
+  getChildLines,
+  INVALID_GRAPHEMES,
+} from "./get-tasks";
 
 /** Returns the heading level (number of `#` chars), or 0 if not a heading. */
 export function getHeadingLevel(line: string): number {
@@ -32,7 +37,7 @@ export interface HeadingSection {
  */
 export function extractHeadingSection(
   lines: string[],
-  heading: string
+  heading: string,
 ): HeadingSection | null {
   const headingTrimmed = heading.trim();
   const headingLevel = getHeadingLevel(headingTrimmed);
@@ -67,7 +72,7 @@ export function extractHeadingSection(
  */
 export function removeCompletedTasksFromSection(
   lines: string[],
-  doneMarkers: string[]
+  doneMarkers: string[],
 ): string[] {
   const result: string[] = [];
   let i = 0;
@@ -80,7 +85,9 @@ export function removeCompletedTasksFromSection(
       i += 1 + children.length;
     } else if (isCompleteTask(line, doneMarkers)) {
       const children = getChildLines(lines, i);
-      const hasIncompleteChild = children.some((c) => isIncompleteTask(c, doneMarkers));
+      const hasIncompleteChild = children.some((c) =>
+        isIncompleteTask(c, doneMarkers),
+      );
       if (hasIncompleteChild) {
         // Complete parent with incomplete children: keep the whole block as-is
         result.push(line, ...children);
@@ -106,7 +113,7 @@ export function removeCompletedTasksFromSection(
  */
 export function removeIncompleteTasksFromSection(
   lines: string[],
-  doneMarkers: string[]
+  doneMarkers: string[],
 ): string[] {
   const result: string[] = [];
   let i = 0;
@@ -114,7 +121,10 @@ export function removeIncompleteTasksFromSection(
     const line = lines[i];
     if (isIncompleteTask(line, doneMarkers)) {
       const children = getChildLines(lines, i);
-      const keptChildren = removeIncompleteTasksFromSection(children, doneMarkers);
+      const keptChildren = removeIncompleteTasksFromSection(
+        children,
+        doneMarkers,
+      );
       if (keptChildren.length > 0) {
         // Keep the parent as structural context for its complete children
         result.push(line, ...keptChildren);
@@ -141,10 +151,13 @@ export function replaceHeadingSection(
   content: string,
   heading: string,
   newSectionLines: string[],
-  leadingNewLine: boolean
+  leadingNewLine: boolean,
 ): { content: string; headingFound: boolean } {
   if (heading === "none") {
-    const appended = newSectionLines.length > 0 ? content + "\n" + newSectionLines.join("\n") : content;
+    const appended =
+      newSectionLines.length > 0
+        ? content + "\n" + newSectionLines.join("\n")
+        : content;
     return { content: appended, headingFound: false };
   }
 
@@ -154,7 +167,10 @@ export function replaceHeadingSection(
 
   const headingIndex = lines.findIndex((l) => l.trim() === headingTrimmed);
   if (headingIndex === -1) {
-    const appended = newSectionLines.length > 0 ? content + "\n" + newSectionLines.join("\n") : content;
+    const appended =
+      newSectionLines.length > 0
+        ? content + "\n" + newSectionLines.join("\n")
+        : content;
     return { content: appended, headingFound: false };
   }
 

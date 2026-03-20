@@ -3,9 +3,8 @@ import { resolve } from 'path';
 
 export default defineConfig({
   build: {
-    // Output main.js in the root directory (where Obsidian expects it)
-    outDir: '.',
-    emptyOutDir: false,
+    outDir: 'bin',
+    emptyOutDir: true,
     minify: true,
     sourcemap: true,
     lib: {
@@ -16,7 +15,8 @@ export default defineConfig({
     },
     rollupOptions: {
       // Mark obsidian as external so it's not bundled
-      external: ['obsidian', 'obsidian-daily-notes-interface'],
+      // (Obsidian provides this at runtime)
+      external: ['obsidian'],
     },
   },
   // Dev server settings

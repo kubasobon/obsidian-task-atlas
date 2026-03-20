@@ -6,17 +6,19 @@ export function isEmptyTask(line: string): boolean {
   return trimmed === "- [ ]" || trimmed === "- [  ]";
 }
 
-  /**
-   * Builds a human-readable carry summary for a Notice.
-   * Returns null if there is nothing to report.
-   */
+/**
+ * Builds a human-readable carry summary for a Notice.
+ * Returns null if there is nothing to report.
+ */
 export function buildCarryNotice(
   tasksKept: number,
-  headingNotFoundMessage: string | null
+  headingNotFoundMessage: string | null,
 ): string | null {
   const parts: string[] = [];
   if (headingNotFoundMessage) parts.push(headingNotFoundMessage);
   if (tasksKept > 0)
-    parts.push(`Carried ${tasksKept} incomplete task${tasksKept > 1 ? "s" : ""} forward.`);
+    parts.push(
+      `Carried ${tasksKept} incomplete task${tasksKept > 1 ? "s" : ""} forward.`,
+    );
   return parts.length > 0 ? parts.join("\n") : null;
 }

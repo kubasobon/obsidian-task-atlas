@@ -1,6 +1,6 @@
 {
     "name": "obsidian-task-atlas",
-    "version": "0.0.1",
+    "version": "1.0.0",
     "description": "Carries incomplete tasks forward from your previous daily note into today's",
     "main": "main.js",
     "author": "Kuba Soboń",
@@ -14,8 +14,7 @@
     "keywords": [
         "obsidian",
         "plugin",
-        "task",
-        "keeper",
+        "tasks",
         "daily-notes"
     ],
     "scripts": {
@@ -25,12 +24,8 @@
         "test:watch": "jest --watch",
         "typecheck": "tsc --noEmit",
         "lint": "eslint src/",
-        "format": "prettier --write ."
-    },
-    "cspell": {
-        "words": [
-            "tasks"
-        ]
+        "format": "prettier --write src/",
+        "deploy": "sh deploy.sh"
     },
     "devDependencies": {
         "@types/jest": "^29.5.0",

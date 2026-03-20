@@ -44,4 +44,4 @@ jobs:
           gh release create "$TAG" \
             --title "$TAG" \
             --notes-from-tag \
-            main.js manifest.json
+            bin/main.js manifest.json

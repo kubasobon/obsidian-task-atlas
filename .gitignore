@@ -6,6 +6,7 @@
 node_modules
 
 # build
+bin/
 main.js
 *.js.map
 

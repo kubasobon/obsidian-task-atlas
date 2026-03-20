@@ -1,7 +1,7 @@
 {
     "id": "task-atlas",
     "name": "TaskAtlas",
-    "version": "0.0.1",
+    "version": "1.0.0",
     "minAppVersion": "1.12.4",
     "description": "Carries incomplete tasks forward from your previous daily note",
     "author": "Kuba Soboń",

@@ -26,6 +26,10 @@ jobs:
       - name: Type check
         run: npm run typecheck
 
+      - name: Format check
+        run: |
+          npx prettier --check src/ || (npx prettier --write src/ && git diff && exit 1)
+
       - name: Lint
         run: npm run lint
 
