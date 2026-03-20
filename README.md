@@ -86,3 +86,13 @@ Make sure the **Daily notes** core plugin is enabled (Settings → Core plugins 
 ## Attribution
 
 Forked from [obsidian-rollover-daily-todos](https://github.com/lumoe/obsidian-rollover-daily-todos) by [lumoe](https://github.com/lumoe), licensed under MIT.
+
+### Notable features
+
+- **Your note structure is preserved.** Your entire task section is carried forward — sub-headings, notes, and nested tasks included. Only fully completed tasks are removed from today's note.
+
+- **Sync-friendly.** TaskAtlas waits for the note to stop changing before acting, so tasks aren't duplicated if your note is still syncing from another device when you open Obsidian.
+
+- **Subtasks travel with their parent.** An unfinished parent task always brings all its subtasks along — even completed ones. In yesterday's note, those completed subtasks are kept as a record of progress.
+
+- **Requires the Daily Notes core plugin** (Settings → Core plugins → Daily notes). Periodic Notes is not supported.
